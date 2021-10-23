@@ -10,17 +10,29 @@ interface IUserResponse {
   id: number;
   name: string;
   avatar_url: string;
-  login: string;  
+  login: string;
 }
 
 class AuthenticateUserService {
-  async execute(code: string) {
+  async execute(code: string, type: string) {
     const url = 'https://github.com/login/oauth/access_token';
+
+    let client_id: string, client_secret: string;
+
+    if (type.toLocaleLowerCase() === 'web') {
+      client_id = process.env.GITHUB_CLIENT_ID_WEB;
+      client_secret = process.env.GITHUB_CLIENT_SECRET_WEB;
+    } else if (type.toLocaleLowerCase() === 'mobile') {
+      client_id = process.env.GITHUB_CLIENT_ID_MOBILE;
+      client_secret = process.env.GITHUB_CLIENT_SECRET_MOBILE;
+    } else {
+      throw new Error('Invalid type');
+    }
 
     const { data: accessTokenResponse } = await axios.post<IAccessTokenResponse>(url, null, {
       params: {
-        client_id: process.env.GITHUB_CLIENT_ID,
-        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        client_id,
+        client_secret,
         code
       },
       headers: {
@@ -59,12 +71,12 @@ class AuthenticateUserService {
         avatar_url: user.avatar_url,
         id: user.id
       },
-    }, 
-    process.env.JWT_SECRET, 
-    {
-      subject: user.id,
-      expiresIn: '1d'
-    });
+    },
+      process.env.JWT_SECRET,
+      {
+        subject: user.id,
+        expiresIn: '1d'
+      });
 
     return { token, user };
   }
