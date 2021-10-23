@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { AuthenticateUserController } from './controllers/AuthenticateUserController';
 import { CreateMessageController } from './controllers/CreateMessageController';
 import { CreatePrivateChatController } from './controllers/CreatePrivateChatController';
+import { CreatePrivateMessageController } from './controllers/CreatePrivateMessageController';
 import { GetLast3MessagesController } from './controllers/GetLast3MessagesController';
 import { UserProfileController } from './controllers/UserProfileController';
 import { ensureAuthenticated } from './middlewares/ensureAuthenticated';
@@ -17,5 +18,7 @@ router.get('/messages/last-3', new GetLast3MessagesController().handle);
 router.get('/profile', ensureAuthenticated, new UserProfileController().handle);
 
 router.post('/chat', ensureAuthenticated, new CreatePrivateChatController().handle);
+
+router.post('/chat/messages', ensureAuthenticated, new CreatePrivateMessageController().handle);
 
 export { router };

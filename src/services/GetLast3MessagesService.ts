@@ -7,6 +7,9 @@ class GetLast3MessagesService {
       orderBy: {
         created_at: 'desc'
       },
+      where: {
+        public: true
+      },
       include: {
         user: true
       }
