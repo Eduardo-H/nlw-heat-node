@@ -8,23 +8,37 @@ generator client {
 }
 
 model User {
-  id          String @id @default(uuid())
-  name        String
-  github_id   Int
-  avatar_url  String
-  login       String
+  id         String @id @default(uuid())
+  name       String
+  github_id  Int
+  avatar_url String
+  login      String
+
+  messages Message[]
+  chats    Chat[]
 
   @@map("users")
+}
+
+model Chat {
+  id String @id @default(uuid())
+
   messages Message[]
+  users    User[]
+
+  @@map("chats")
 }
 
 model Message {
-  id          String @id @default(uuid())
-  text        String
-  created_at  DateTime @default(now())
+  id         String   @id @default(uuid())
+  text       String
+  created_at DateTime @default(now())
 
-  user User @relation(fields: [user_id], references: [id])
+  user User  @relation(fields: [user_id], references: [id])
+  Chat Chat? @relation(fields: [chat_id], references: [id])
+
+  user_id String
+  chat_id String?
 
   @@map("messages")
-  user_id String
 }
