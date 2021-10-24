@@ -4,6 +4,7 @@ import { AuthenticateUserController } from './controllers/AuthenticateUserContro
 import { CreateMessageController } from './controllers/CreateMessageController';
 import { CreatePrivateChatController } from './controllers/CreatePrivateChatController';
 import { CreatePrivateMessageController } from './controllers/CreatePrivateMessageController';
+import { GetChatController } from './controllers/GetChatController';
 import { GetLast3MessagesController } from './controllers/GetLast3MessagesController';
 import { GetUserChatsController } from './controllers/GetUserChatsController';
 import { UserProfileController } from './controllers/UserProfileController';
@@ -21,7 +22,9 @@ router.get('/profile', ensureAuthenticated, new UserProfileController().handle);
 
 router.post('/chat', ensureAuthenticated, new CreatePrivateChatController().handle);
 
-router.get('/chats', ensureAuthenticated, new GetUserChatsController().handle);
+router.get('/chats/all', ensureAuthenticated, new GetUserChatsController().handle);
+
+router.get('/chat/:id', ensureAuthenticated, new GetChatController().handle);
 
 router.post('/chat/messages', ensureAuthenticated, new CreatePrivateMessageController().handle);
 
