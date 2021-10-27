@@ -8,6 +8,11 @@ class GetUserChatsService {
           some: {
             id: user_id,
           }
+        },
+        AND: {
+          messages: {
+            some: {}
+          }
         }
       },
       include: {
